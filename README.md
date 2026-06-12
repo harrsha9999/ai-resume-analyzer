@@ -3,7 +3,7 @@
 An AI-powered tool that analyzes resumes, returns an ATS-compatibility score,
 detects skill gaps against a target role, and suggests concrete improvements.
 
-🔗 **Live demo:** https://ai-resume-analyzer-harsha.vercel.app
+🔗 **Live demo:** https://ai-resume-analyzer-harsha.onrender.com
 💻 **Stack:** React · Node.js · Express · MongoDB · OpenAI API
 
 ---
