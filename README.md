@@ -1,70 +1,69 @@
 # AI Resume Analyzer
 
-An AI-powered tool that analyzes resumes, returns an ATS-compatibility score,
-detects skill gaps against a target role, and suggests concrete improvements.
+Analyzes a resume against a target job description and returns an ATS-style
+match score, the matched/missing keywords, and concrete improvement
+suggestions. Runs fully offline with a deterministic scoring engine; an
+OpenAI key can be added to enrich suggestions.
 
 🔗 **Live demo:** https://ai-resume-analyzer-harsha.onrender.com
-💻 **Stack:** React · Node.js · Express · MongoDB · OpenAI API
+💻 **Stack:** Node.js · Express · Vanilla JS frontend (OpenAI optional)
 
 ---
 
 ## Why I built it
-Most candidates get auto-rejected by ATS filters and never find out why. This
-tool gives instant, specific feedback so a resume can be fixed before applying.
+Most candidates get auto-rejected by ATS keyword filters and never find out
+why. This gives instant, specific feedback before you apply.
 
 ## Features
-- Upload a resume (PDF/text) and paste a target job description
-- LLM-generated ATS-style score (0–100) with reasoning
-- Missing-keyword and skill-gap detection against the job description
-- Actionable, line-level rewrite suggestions
-- History of past analyses per user
+- Paste resume text + a target job description
+- ATS-style match score (0–100) based on job-description keyword coverage
+- Matched and missing keyword lists
+- Improvement suggestions (keyword gaps, quantification, length)
+- Works with no API key (deterministic engine); OpenAI key optional
+
+## How it works
+1. The client POSTs `{ resume, jobDescription }` to `/api/analyze`.
+2. The server extracts ranked keywords from the job description, checks the
+   resume for coverage, and computes a score.
+3. It returns matched/missing keywords + targeted suggestions.
+
+The scoring logic is pure and unit-tested (keyword extraction, scoring,
+suggestion rules).
 
 ## Tech Stack
-| Layer     | Tech                                  |
-|-----------|---------------------------------------|
-| Frontend  | React, <CSS/Tailwind>                 |
-| Backend   | Node.js, Express.js                   |
-| Database  | MongoDB (Mongoose)                    |
-| AI        | OpenAI API (structured JSON output)   |
-| Auth      | <JWT / none>                          |
-
-## Architecture
-1. Client sends resume text + job description to `/api/analyze`.
-2. Server builds a strict prompt and calls the OpenAI API.
-3. Response is validated against a JSON schema (with retry on malformed output).
-4. Result is stored in MongoDB and returned to the client.
-
-## Engineering notes
-- **Reliable structured output:** enforced a strict prompt schema + server-side
-  JSON validation + automatic retry to handle malformed LLM responses.
-- **Cost control:** <e.g., truncate resume text to N tokens before sending>.
+| Layer    | Tech                                   |
+|----------|----------------------------------------|
+| Backend  | Node.js, Express.js                    |
+| Frontend | Vanilla HTML/CSS/JS (served statically)|
+| AI       | OpenAI API (optional upgrade path)     |
+| Tests    | Node.js built-in test runner           |
 
 ## Getting Started
 ```bash
 git clone https://github.com/harrsha9999/ai-resume-analyzer.git
 cd ai-resume-analyzer
 npm install
-cp .env.example .env
-npm run dev
+npm run dev      # open http://localhost:5000
+npm test         # 6 unit tests
 ```
 
-### Environment variables
+### Environment variables (all optional)
 ```
-OPENAI_API_KEY=
-MONGODB_URI=
 PORT=5000
+OPENAI_API_KEY=     # if set, used to enrich suggestions; otherwise offline engine
+OPENAI_MODEL=gpt-4o-mini
 ```
 
 ## API
-| Method | Endpoint        | Description                  |
-|--------|-----------------|------------------------------|
-| POST   | /api/analyze    | Analyze resume vs. job desc  |
-| GET    | /api/history    | Get past analyses            |
+| Method | Endpoint      | Description                       |
+|--------|---------------|-----------------------------------|
+| GET    | /api/health   | Status + whether an LLM key is set|
+| POST   | /api/analyze  | Analyze resume vs. job description|
 
 ## Roadmap
-- [ ] Support multiple file formats
-- [ ] Role-specific scoring templates
-- [ ] Export report as PDF
+- [ ] LLM-enriched, line-level rewrite suggestions
+- [ ] Resume file upload (PDF parsing)
+- [ ] Persisted analysis history
 
 ## Author
 **Harsha Vardhan G** — [LinkedIn](https://linkedin.com/in/haarsha9999) · [GitHub](https://github.com/harrsha9999)
