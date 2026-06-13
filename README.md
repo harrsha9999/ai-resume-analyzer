@@ -8,6 +8,8 @@ OpenAI key can be added to enrich suggestions.
 🔗 **Live demo:** https://ai-resume-analyzer-harsha.onrender.com
 💻 **Stack:** Node.js · Express · Vanilla JS frontend (OpenAI optional)
 
+![CI](https://github.com/harrsha9999/ai-resume-analyzer/actions/workflows/ci.yml/badge.svg)
+
 ---
 
 ## Why I built it
